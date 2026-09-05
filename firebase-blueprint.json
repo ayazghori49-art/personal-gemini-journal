@@ -1,0 +1,72 @@
+{
+  "entities": {
+    "JournalEntry": {
+      "title": "JournalEntry",
+      "description": "A user's journal entry",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "number" }
+      }
+    },
+    "ChatSession": {
+      "title": "ChatSession",
+      "description": "A user's chat session",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "messages": { "type": "array" }
+      }
+    },
+    "SavedMoment": {
+      "title": "SavedMoment",
+      "description": "A saved reflection",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" }
+      }
+    },
+    "UserSettings": {
+      "title": "UserSettings",
+      "description": "Settings for a user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" }
+      }
+    },
+    "Discovery": {
+      "title": "Discovery",
+      "description": "Generated discoveries about the user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "text": { "type": "string" },
+        "feedback": { "type": "string" },
+        "createdAt": { "type": "number" }
+      }
+    }
+  },
+  "firestore": {
+    "/entries/{entryId}": {
+      "schema": { "$ref": "#/entities/JournalEntry" },
+      "description": "Stores user journal entries"
+    },
+    "/chats/{chatId}": {
+      "schema": { "$ref": "#/entities/ChatSession" },
+      "description": "Stores user chat sessions"
+    },
+    "/savedMoments/{momentId}": {
+      "schema": { "$ref": "#/entities/SavedMoment" },
+      "description": "Stores saved moments"
+    },
+    "/userSettings/{userId}": {
+      "schema": { "$ref": "#/entities/UserSettings" },
+      "description": "Stores user settings"
+    },
+    "/discoveries/{discoveryId}": {
+      "schema": { "$ref": "#/entities/Discovery" },
+      "description": "Stores user discoveries"
+    }
+  }
+}

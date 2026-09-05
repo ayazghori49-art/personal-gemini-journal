@@ -1,0 +1,129 @@
+--- src/components/views/HomeView.tsx
++++ src/components/views/HomeView.tsx
+@@ -1,6 +1,8 @@
+-import { useState, useEffect } from 'react';
++import { useState, useEffect, useRef } from 'react';
+ import { auth } from '../../lib/firebase';
+ import { ChatView } from './ChatView';
+ import { ChatMessage } from '../../types';
++import { Menu, X } from 'lucide-react';
++import { cn } from '../../lib/utils';
+ 
+ interface HomeViewProps {
+@@ -9,6 +11,7 @@
+   isRecording: boolean;
+   onToggleMic: () => void;
+   persona: string;
++  onNavigate?: (tab: string) => void;
+ }
+ 
+ export function HomeView({ 
+@@ -17,29 +20,43 @@
+   onSendMessage, 
+   isRecording, 
+   onToggleMic, 
+-  persona 
++  persona,
++  onNavigate
+ }: HomeViewProps) {
+   const user = auth.currentUser;
+-  const firstName = user?.displayName?.split(' ')[0] || 'there';
++  const displayName = user?.displayName?.trim();
++  const firstName = displayName ? displayName.split(' ')[0] : 'there';
+   const [greeting, setGreeting] = useState('');
+   const [subtitle, setSubtitle] = useState('');
++  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+ 
+   useEffect(() => {
+     const hour = new Date().getHours();
+-    if (hour < 12) {
+-      setGreeting(`Good morning, ${firstName}`);
++    if (hour >= 5 && hour < 12) {
++      setGreeting(`Good morning, ${firstName} 👋`);
+       setSubtitle("What's on your mind today?");
+-    } else if (hour < 17) {
+-      setGreeting(`Good afternoon, ${firstName}`);
++    } else if (hour >= 12 && hour < 17) {
++      setGreeting(`Good afternoon, ${firstName} ☀️`);
+       setSubtitle("How is your day going so far?");
+-    } else if (hour < 21) {
+-      setGreeting(`Good evening, ${firstName}`);
++    } else if (hour >= 17 && hour < 20) {
++      setGreeting(`Good evening, ${firstName} 🌇`);
+       setSubtitle("How was your day?");
+     } else {
+-      setGreeting(`Good night, ${firstName}`);
++      setGreeting(`Good night, ${firstName} 🌙`);
+       setSubtitle("Anything on your mind before you rest?");
+     }
+   }, [firstName]);
++  
++  const navItems = [
++    { id: 'home', label: 'Home' },
++    { id: 'journal', label: 'Journal' },
++    { id: 'history', label: 'History' },
++    { id: 'journey', label: 'Journey' },
++    { id: 'profile', label: 'Profile' },
++    { id: 'settings', label: 'Settings' }
++  ];
+ 
+   return (
+     <div className="flex-1 flex flex-col h-full overflow-hidden bg-white dark:bg-slate-950">
++      {/* Header section with menu */}
+       <div className="px-4 sm:px-6 pt-12 pb-4 flex-shrink-0">
+         <div className="max-w-3xl mx-auto">
++          <div className="flex items-center justify-between mb-6">
++            <button 
++              onClick={() => setIsDrawerOpen(true)}
++              className="p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
++            >
++              <Menu className="w-6 h-6 text-slate-700 dark:text-slate-300" />
++            </button>
++          </div>
+           <h1 className="font-serif text-3xl sm:text-4xl text-slate-900 dark:text-slate-100 font-semibold tracking-tight mb-2">
+             {greeting}
+           </h1>
+@@ -48,2 +65,39 @@
+       </div>
+       
++      {/* Navigation Drawer Overlay */}
++      {isDrawerOpen && (
++        <div className="fixed inset-0 z-50 flex">
++          <div 
++            className="fixed inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm transition-opacity"
++            onClick={() => setIsDrawerOpen(false)}
++          />
++          <div className="relative w-64 max-w-sm flex-1 bg-white dark:bg-slate-900 shadow-xl transition-transform transform border-r border-slate-200 dark:border-slate-800 flex flex-col">
++            <div className="pt-12 px-6 pb-6 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
++              <span className="font-serif font-semibold text-lg text-slate-900 dark:text-slate-100 tracking-tight">AI Journal</span>
++              <button 
++                onClick={() => setIsDrawerOpen(false)}
++                className="p-2 -mr-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
++              >
++                <X className="w-5 h-5 text-slate-500" />
++              </button>
++            </div>
++            <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
++              {navItems.map((item) => (
++                <button
++                  key={item.id}
++                  onClick={() => {
++                    setIsDrawerOpen(false);
++                    if (onNavigate) {
++                      onNavigate(item.id);
++                    }
++                  }}
++                  className={cn(
++                    "w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors",
++                    "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100"
++                  )}
++                >
++                  {item.label}
++                </button>
++              ))}
++            </nav>
++          </div>
++        </div>
++      )}
++      
+       <div className="flex-1 overflow-hidden">

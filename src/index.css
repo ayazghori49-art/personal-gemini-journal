@@ -1,0 +1,62 @@
+@import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+}
+
+@layer base {
+  body {
+    @apply font-sans antialiased text-slate-800 bg-[#FAF9F6] dark:bg-[#0D0D12] dark:text-slate-100 selection:bg-violet-200 selection:text-violet-900 dark:selection:bg-violet-900/40 dark:selection:text-violet-100;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(280, 50%, 95%, 1) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(330, 40%, 95%, 1) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(220, 50%, 95%, 1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(260, 40%, 95%, 1) 0px, transparent 50%);
+  }
+  
+  .dark body {
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(280, 30%, 15%, 1) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(330, 20%, 12%, 1) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(220, 30%, 15%, 1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(260, 20%, 12%, 1) 0px, transparent 50%);
+  }
+}
+
+@layer utilities {
+  .premium-shadow {
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.06), 0 4px 12px -6px rgba(0,0,0,0.03);
+  }
+  .dark .premium-shadow {
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.3), 0 4px 12px -6px rgba(0,0,0,0.2);
+  }
+  .premium-card {
+    @apply bg-white/80 dark:bg-[#16161E]/80 backdrop-blur-xl border border-white/50 dark:border-white/5 rounded-3xl;
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.06), 0 4px 12px -6px rgba(0,0,0,0.03);
+  }
+  .dark .premium-card {
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.3), 0 4px 12px -6px rgba(0,0,0,0.2);
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-black/10 dark:bg-white/10 rounded-full; }
+  .custom-scrollbar:hover::-webkit-scrollbar-thumb { @apply bg-black/20 dark:bg-white/20; }
+  
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  
+  .markdown-body { @apply text-[15px] leading-relaxed font-sans; }
+  .markdown-body p { @apply mb-4 last:mb-0; }
+  .markdown-body h1, .markdown-body h2, .markdown-body h3 { @apply font-serif font-semibold mt-6 mb-3 tracking-tight; }
+  .markdown-body h1 { @apply text-2xl; }
+  .markdown-body h2 { @apply text-xl; }
+  .markdown-body h3 { @apply text-lg; }
+  .markdown-body ul { @apply list-disc list-outside ml-5 mb-4 space-y-1.5 marker:text-violet-400; }
+  .markdown-body ol { @apply list-decimal list-outside ml-5 mb-4 space-y-1.5 marker:text-violet-400; }
+  .markdown-body strong { @apply font-semibold; }
+  .markdown-body code { @apply bg-black/5 dark:bg-white/10 px-1.5 py-0.5 rounded text-[13px] font-mono border border-black/5 dark:border-white/5; }
+  .markdown-body blockquote { @apply border-l-2 border-violet-300 dark:border-violet-700 pl-4 py-1 my-4 italic text-slate-600 dark:text-slate-400 bg-violet-50/50 dark:bg-violet-900/20 rounded-r-lg; }
+}

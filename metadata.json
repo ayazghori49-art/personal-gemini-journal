@@ -1,0 +1,8 @@
+{
+  "name": "Personal Gemini Journal",
+  "description": "A secure, production-grade journaling app with Gemini integration.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,17 @@
+--- src/components/views/SettingsView.tsx
++++ src/components/views/SettingsView.tsx
+@@ -10,7 +10,13 @@
+     let newEnabled = !settings.notificationsEnabled;
+     if (newEnabled) {
+       if ('Notification' in window) {
+-        const permission = await Notification.requestPermission();
++        let permission;
++        try {
++          permission = await Notification.requestPermission();
++        } catch (e) {
++          console.error("Notification permission error", e);
++          permission = 'denied';
++        }
+         if (permission !== 'granted') {
+           alert('Notification permission is required to enable notifications.');
+           newEnabled = false;
