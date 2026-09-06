@@ -1,18 +1,34 @@
 # Personal Gemini Journal
 
-A secure, full-stack journaling application using Google's Gemini AI for empathetic reflections, mood tracking, and thematic insights. Built with React, Tailwind, Express, and Firebase.
+*Built for the Google Cloud Gen AI Academy APAC Ideathon Challenge*
 
-## Key Features
-- **AI Journaling**: Conversational AI assistant for guided reflection.
-- **Analytics**: Track mood history and visualize emotional trends.
-- **AI Insights**: Auto-generate summaries and extract core themes.
-- **Memory Vault**: Save important breakthrough moments securely.
+A secure, full-stack AI journaling application that leverages Google's Gemini AI to provide empathetic interactions, moment summarization, mood tracking, and thematic insights. 
 
-## Architecture & Security
-- **Firebase Auth**: Secure user authentication and session management.
-- **Firestore Data Isolation**: Strict `firestore.rules` ensure users can only access their own data (`request.auth.uid == resource.data.userId`).
-- **Gemini API & Secret Manager**: The `GEMINI_API_KEY` is securely stored in Secret Manager and strictly accessed via the Node.js Express backend. The React frontend never exposes API keys.
-- **Cloud Run Deployment**: Bundles the Vite frontend and Express API into a single, scalable Node.js container (`dist/server.cjs`).
+## Overview
+Personal Gemini Journal goes beyond a simple digital diary. It acts as an empathetic AI companion that helps users reflect on their thoughts, organizes their emotional history, and provides insightful summaries of their journaling patterns over time. The application is built with a strong focus on data privacy, security, and an enriching user experience.
+
+## Unique Features
+- **Multiple Conversation Modes**: Tailor the AI's conversational style and persona to fit your current reflective needs.
+- **Multi-Perspective Answers**: Gain different viewpoints on your journal entries to foster personal growth and deeper understanding.
+- **Analytics Dashboard & Mood Tracking**: Visualize your emotional journey, track mood history over time, and see data-driven insights.
+- **Memory Vault & Theme Extraction**: Automatically generate concise summaries and securely extract core themes, facts, and breakthrough moments.
+- **Google Sign-In**: Seamless and secure onboarding using Google Authentication.
+
+## Tech Stack
+- **Google AI Studio**: Core development and AI agent environment.
+- **Gemini API**: Powers the conversational AI, thematic analysis, multi-perspective reflections, and intelligent summarization.
+- **Firebase Authentication**: Secures user identities and manages robust sessions, including Google Sign-In.
+- **Cloud Firestore**: Scalable NoSQL cloud database for persistent data storage.
+- **Google Cloud Secret Manager**: Securely stores API keys and sensitive environment variables.
+- **React & Tailwind CSS**: Frontend user interface framework.
+- **Express (Node.js)**: Backend server handling secure API proxying and validation.
+
+## Security & Threat Modeling
+Security and data privacy are foundational to this architecture:
+- **Firestore Data Isolation**: Strict `firestore.rules` guarantee that users can only access their own data (`request.auth.uid == resource.data.userId`). Cross-user data leakage is cryptographically blocked at the database level.
+- **No Hardcoded Keys**: The React frontend never exposes the `GEMINI_API_KEY`. 
+- **Secure API Proxying**: All AI requests route through the Express Node.js backend (`server.ts`). The backend verifies Firebase Auth ID tokens before fulfilling any AI requests, mitigating client-side tampering or unauthorized API consumption.
+- **Cloud Run Deployment**: The production build runs in a sandboxed, containerized environment with strict egress and ingress controls.
 
 ## Local Setup
 
@@ -23,6 +39,7 @@ A secure, full-stack journaling application using Google's Gemini AI for empathe
 
 2. **Environment Variables**: Create a `.env` file based on `.env.example`:
    ```env
+   # Securely injected by AI Studio / Secret Manager in production
    GEMINI_API_KEY="your_gemini_api_key_here"
    APP_URL="http://localhost:3000"
    ```
@@ -33,9 +50,8 @@ A secure, full-stack journaling application using Google's Gemini AI for empathe
    ```
 
 ## Deployment
-
 Deploy seamlessly to Google Cloud Run:
 ```bash
-npm run build  # Compiles frontend (dist/) and backend (dist/server.cjs)
+npm run build  # Compiles Vite frontend and ESBuild Express server
 npm start      # Starts the production Express server on port 3000
 ```
